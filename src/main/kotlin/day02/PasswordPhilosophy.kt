@@ -6,48 +6,41 @@ import java.lang.IllegalStateException
 class PasswordPhilosophy {
 
     fun countValidPasswords(input: List<String>): Int =
-        parseInput(input).count{ isValidPassword(it.first, it.second) }
+        parseInput(input).count{ isValidPassword(it) }
 
     fun countValidTobogganPasswords(input: List<String>): Int =
-        parseInput(input).count{ isValidTobogganPassword(it.first, it.second) }
+        parseInput(input).count{ isValidTobogganPassword(it) }
 
-    private fun isValidPassword(passwordPolicy: PasswordPolicy, password: String): Boolean {
-        val charCount = password.count { it == passwordPolicy.letter }
-        return charCount <= passwordPolicy.maxOccurrences && charCount >= passwordPolicy.minOccurrences
+    private fun isValidPassword(passwordAndPolicy: PasswordAndPolicy): Boolean {
+        val charCount = passwordAndPolicy.password.count { it == passwordAndPolicy.letter }
+        return charCount <= passwordAndPolicy.number2 && charCount >= passwordAndPolicy.number1
     }
 
-    private fun isValidTobogganPassword(passwordPolicy: PasswordPolicy, password: String): Boolean {
-        val pos1ContainsChar = password[passwordPolicy.minOccurrences - 1] == passwordPolicy.letter
-        val pos2ContainsChar = password[passwordPolicy.maxOccurrences - 1] == passwordPolicy.letter
+    private fun isValidTobogganPassword(passwordAndPolicy: PasswordAndPolicy): Boolean {
+        val pos1ContainsChar = passwordAndPolicy.password[passwordAndPolicy.number1 - 1] == passwordAndPolicy.letter
+        val pos2ContainsChar = passwordAndPolicy.password[passwordAndPolicy.number2 - 1] == passwordAndPolicy.letter
 
         return pos1ContainsChar xor pos2ContainsChar
     }
 
-    private fun parseInput(input: List<String>): List<Pair<PasswordPolicy, String>> =
-        input.map {
-            val splits = it.split(": ")
-            val passwordPolicy = PasswordPolicy.parse(splits[0])
-            Pair(passwordPolicy, splits[1])
-        }
+    private fun parseInput(input: List<String>): List<PasswordAndPolicy> = input.map { PasswordAndPolicy.parse(it) }
 }
 
 fun main() {
     val input = File("src/main/resources/day02/input.txt").readLines()
-    val validPasswords = PasswordPhilosophy().countValidPasswords(input)
-    val validTobogganPasswords = PasswordPhilosophy().countValidTobogganPasswords(input)
-    println(validPasswords)
-    println(validTobogganPasswords)
+    println(PasswordPhilosophy().countValidPasswords(input))
+    println(PasswordPhilosophy().countValidTobogganPasswords(input))
 }
 
-data class PasswordPolicy(val minOccurrences: Int, val maxOccurrences: Int, val letter: Char) {
+data class PasswordAndPolicy(val number1: Int, val number2: Int, val letter: Char, val password: String) {
     companion object {
-        private val policyRegex = Regex("""(\d+)-(\d+) ([a-z])""")
+        private val policyRegex = Regex("""(\d+)-(\d+) ([a-z]): (.*)""")
 
-        fun parse(input: String): PasswordPolicy {
+        fun parse(input: String): PasswordAndPolicy {
             val match = policyRegex.find(input)
             if (match != null) {
                 val groupValues = match.groupValues
-                return PasswordPolicy(groupValues[1].toInt(), groupValues[2].toInt(), groupValues[3][0])
+                return PasswordAndPolicy(groupValues[1].toInt(), groupValues[2].toInt(), groupValues[3][0], groupValues[4])
             }
 
             throw IllegalStateException("Unable to parse policy")
