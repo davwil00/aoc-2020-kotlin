@@ -21,19 +21,15 @@ class EncodingError {
 
     fun breakEncryption(input: List<String>, target: Long): Long {
         val intList = input.map{ it.toLong() }
-        var found: Long? = null
-        (2..20).forEach { windowSize ->
-            if (found != null) {
-                return found as Long
-            }
-            intList.windowed(windowSize) {
+        (2..input.size).forEach { windowSize ->
+            intList.windowed(windowSize).forEach {
                 if (it.sum() == target) {
                     val sortedList = it.sorted()
-                    found = sortedList.first() + sortedList.last()
+                    return sortedList.first() + sortedList.last()
                 }
             }
-
         }
+
         throw IllegalStateException("Unable to break encryption")
     }
 }
