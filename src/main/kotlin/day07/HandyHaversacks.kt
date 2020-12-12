@@ -30,11 +30,7 @@ class HandyHaversacks {
     private fun reverseBagMap() {
         bagMap.forEach { (colour, containsColours) ->
             containsColours.forEach { containsColour ->
-                if (inverseBagMap.containsKey(containsColour.colour)) {
-                    inverseBagMap[containsColour.colour]?.add(colour)
-                } else {
-                    inverseBagMap[containsColour.colour] = mutableListOf(colour)
-                }
+                inverseBagMap.computeIfAbsent(containsColour.colour) { mutableListOf() }.add(colour)
             }
         }
     }
@@ -86,7 +82,6 @@ class HandyHaversacks {
     }
 
     data class BagNumber(val colour: String, val number: Int)
-
 }
 
 fun main() {
