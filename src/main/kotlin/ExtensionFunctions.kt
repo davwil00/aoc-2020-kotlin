@@ -1,0 +1,2 @@
+operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>): Pair<Int, Int> = Pair(this.first + other.first, this.second + other.second)
+operator fun Pair<Int, Int>.times(multiplier: Int): Pair<Int, Int> = Pair(this.first * multiplier, this.second * multiplier)

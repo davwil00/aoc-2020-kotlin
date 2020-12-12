@@ -1,6 +1,8 @@
 package day11
 
 import Part
+import plus
+import times
 import java.io.File
 import java.lang.IndexOutOfBoundsException
 
@@ -84,10 +86,6 @@ class SeatingSystem(private val part: Part) {
     private fun countOccupiedSeats(seatLayout: List<String>) =
         seatLayout.map { row -> row.count { it == '#' } }.sum()
 }
-
-operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>): Pair<Int, Int> = Pair(this.first + other.first, this.second + other.second)
-operator fun Pair<Int, Int>.times(multiplier: Int): Pair<Int, Int> = Pair(this.first * multiplier, this.second * multiplier)
-
 
 fun main() {
     val input = File("src/main/resources/day11/input.txt").readLines()
