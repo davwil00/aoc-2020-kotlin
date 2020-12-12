@@ -4,28 +4,28 @@ import java.io.File
 
 class AdapterArray {
 
-    fun findJolts(input: List<String>): Int {
-        val adapters = input.map { it.toInt() } + 0
+    fun findJolts(input: List<String>): Long {
+        val adapters = input.map { it.toLong() } + 0
         val usedAdapters = findAdapterChain(adapters, listOf(0), 0)
         val ones = usedAdapters.zipWithNext { curr, next ->
-            if (next - curr == 1) 1 else 0
+            if (next - curr == 1L) 1L else 0
         }.sum()
         return ones * (adapters.size - ones)
     }
 
-    fun findAdapterNodes(input: List<String>): Int {
-        val adapters = input.map { it.toInt() } + 0
+    fun findAdapterNodes(input: List<String>): Long {
+        val adapters = input.map { it.toLong() } + 0
         val combs = findAdapterCombinations(adapters)
         println(combs)
         return countCombs(combs, combs[0]!!, 0, mutableMapOf())
     }
 
     private fun countCombs(
-        combs: Map<Int, List<Int>>,
-        toVisit: List<Int>,
-        count: Int,
-        visited: MutableMap<Int, Int>
-    ): Int {
+        combs: Map<Long, List<Long>>,
+        toVisit: List<Long>,
+        count: Long,
+        visited: MutableMap<Long, Long>
+    ): Long {
         if (toVisit.isEmpty()) {
             return 1
         }
@@ -34,15 +34,17 @@ class AdapterArray {
             return visited[toVisit[0]]!!
         }
 
-        return toVisit.map {
+        val sum = toVisit.map {
             val sum = countCombs(combs, combs[it]!!, count, visited)
             visited[it] = sum
             sum
         }.sum()
+//        println(visited)
+        return sum
     }
 
-    private fun findAdapterCombinations(availableAdapters: List<Int>): Map<Int, List<Int>> {
-        val map = mutableMapOf<Int, List<Int>>().toSortedMap(Comparator.reverseOrder())
+    private fun findAdapterCombinations(availableAdapters: List<Long>): Map<Long, List<Long>> {
+        val map = mutableMapOf<Long, List<Long>>().toSortedMap(Comparator.reverseOrder())
         availableAdapters.forEach { adapter ->
             map[adapter] = findCompatibleAdapters(adapter, availableAdapters)
         }
@@ -50,7 +52,7 @@ class AdapterArray {
         return map
     }
 
-    private tailrec fun findAdapterChain(availableAdapters: List<Int>, usedAdapters: List<Int>, joltage: Int): List<Int> {
+    private tailrec fun findAdapterChain(availableAdapters: List<Long>, usedAdapters: List<Long>, joltage: Long): List<Long> {
         if (availableAdapters.isEmpty()) {
             return usedAdapters
         }
@@ -62,7 +64,7 @@ class AdapterArray {
         )
     }
 
-    private fun findCompatibleAdapters(joltage: Int, adapters: List<Int>): List<Int> {
+    private fun findCompatibleAdapters(joltage: Long, adapters: List<Long>): List<Long> {
         return adapters.filter {
             it in joltage + 1..joltage + 3
         }
