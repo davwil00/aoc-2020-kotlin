@@ -95,6 +95,6 @@ class RainRisk {
 
 fun main() {
     val input = File("src/main/resources/day12/input.txt").readLines()
-    println(RainRisk().findManhattanDistance(input))
-    println(RainRisk().findManhattanDistancePart2(input))
+    println(RainRisk().findManhattanDistance(input)) // 845
+    println(RainRisk().findManhattanDistancePart2(input)) // 27016
 }
