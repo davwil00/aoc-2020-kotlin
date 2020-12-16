@@ -6,7 +6,6 @@ class TicketTranslation {
 
     fun findTicketScanningErrorRate(input: List<String>): Int {
         val rules = parseRules(input)
-        val myTicket = parseTicket(input.dropWhile { it != "your ticket:" }.take(2)[1])
         val nearbyTicketsList = input.dropWhile { it != "nearby tickets:" }
         val nearbyTickets = nearbyTicketsList.subList(1, nearbyTicketsList.size).map { parseTicket(it) }
 
