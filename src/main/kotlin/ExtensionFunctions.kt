@@ -15,3 +15,7 @@ fun List<String>.rotate(): List<String> {
 }
 
 fun List<String>.flipVertical() = this.map { line -> line.reversed() }
+
+fun Regex.countMatches(input: String) = this.findAll(input).toList().size
+
+fun <T: Comparable<T>> min(vararg items: T) = items.toList().minOrNull()
