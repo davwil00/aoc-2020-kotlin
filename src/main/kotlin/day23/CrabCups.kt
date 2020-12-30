@@ -1,3 +1,5 @@
+package day23
+
 import org.slf4j.LoggerFactory
 import java.util.*
 

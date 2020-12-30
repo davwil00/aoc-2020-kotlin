@@ -1,6 +1,7 @@
+package day23
+
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
 
 internal class CrabCupsTest {
 
