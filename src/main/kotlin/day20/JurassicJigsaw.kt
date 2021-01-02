@@ -2,7 +2,6 @@ package day20
 
 import countMatches
 import flipVertical
-import min
 import rotate
 import java.io.File
 import java.lang.IllegalArgumentException
@@ -184,12 +183,12 @@ class JurassicJigsaw {
     private fun countMonsters(image: List<String>): Long {
         var monstersFound = 0L
         image.windowed(3).forEach { window ->
-            val monsterCount = min(
+            val monsterCount = minOf(
                 monsterLine1Regex.countMatches(window[0]),
                 monsterLine2Regex.countMatches(window[1]),
                 monsterLine3Regex.countMatches(window[2])
             )
-            monstersFound += monsterCount ?: 0
+            monstersFound += monsterCount
 
         }
 
