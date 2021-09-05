@@ -12,13 +12,12 @@ object PassportProcessing {
 
     fun parseInput(input: String): Int {
         return input.split("\n\n")
-                .map { passport ->
-                    passport.replace("\n", " ").split(" ").map {
-                        val fieldValuePair = it.split(":")
-                        fieldValuePair[0] to fieldValuePair[1]
-                    }.toMap()
-                }.filter { isValid(it) }
-                .count()
+            .map { passport ->
+                passport.replace("\n", " ").split(" ").associate {
+                    val (key, value) = it.split(":")
+                    key to value
+                }
+            }.count { isValid(it) }
     }
 
     private fun isValid(passport: Map<String, String>): Boolean {
@@ -30,15 +29,15 @@ object PassportProcessing {
 
     fun isValidField(key: String, value: String): Boolean {
         return when (key) {
-            "byr" -> YEAR_REGEX.matches(value) && value.toInt() in 1920..2002
-            "iyr" -> YEAR_REGEX.matches(value) && value.toInt() in 2010..2020
-            "eyr" -> YEAR_REGEX.matches(value) && value.toInt() in 2020..2030
-            "hgt" -> HEIGHT_REGEX.matches(value) &&
+            "byr" -> value matches YEAR_REGEX && value.toInt() in 1920..2002
+            "iyr" -> value matches YEAR_REGEX && value.toInt() in 2010..2020
+            "eyr" -> value matches YEAR_REGEX && value.toInt() in 2020..2030
+            "hgt" -> value matches HEIGHT_REGEX &&
                     (value.endsWith("cm") && value.substringBefore("cm").toInt() in 150..193) ||
                     (value.endsWith("in") && value.substringBefore("in").toInt() in 59..76)
-            "hcl" -> HAIR_COLOUR_REGEX.matches(value)
-            "ecl" -> EYE_COLOUR_REGEX.matches(value)
-            "pid" -> PID_REGEX.matches(value) && value.length == 9
+            "hcl" -> value matches HAIR_COLOUR_REGEX
+            "ecl" -> value matches EYE_COLOUR_REGEX
+            "pid" -> value matches PID_REGEX && value.length == 9
             "cid" -> true
             else -> false
         }
